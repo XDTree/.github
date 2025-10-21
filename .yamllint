@@ -1,11 +1,17 @@
 ---
 extends: default
 
+# (optional) skip common junk
+ignore: |
+  node_modules/
+  .git/
+
 rules:
-  document-start: true            # require '---' at top
+  document-start:
+    present: true        # require '---' at top of YAML files
   line-length:
     max: 180
     level: warning
   truthy:
-    # Allow GitHub Actions keys/values like 'on'/'off'
-    allowed-values: ['true', 'false', 'on', 'off']
+    # Avoid false positives on GitHub workflows that use the key `on:`
+    allowed-values: ['true', 'false', 'on', 'off', 'yes', 'no']
