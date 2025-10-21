@@ -1,0 +1,5 @@
+- [ ] Require PR reviews (>=1)
+- [ ] Require status checks (CI, CodeQL)
+- [ ] Require signed commits
+- [ ] Disallow force‑push; linear history
+- [ ] Protect tags v*

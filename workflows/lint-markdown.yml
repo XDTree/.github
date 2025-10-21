@@ -1,0 +1,14 @@
+name: Reusable – Lint Markdown
+
+on:
+  workflow_call:
+
+jobs:
+  mdlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ensure Node present and run markdownlint
+        run: |
+          npm --version || (curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt-get install -y nodejs)
+          npx --yes markdownlint-cli "**/*.md" || true

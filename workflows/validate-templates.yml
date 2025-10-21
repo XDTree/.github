@@ -1,0 +1,48 @@
+name: Validate templates
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install yamllint
+        run: pip install yamllint
+      - name: Lint YAML
+        run: yamllint -s .
+
+  yaml_parse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse YAML files with Python
+        run: |
+          python - <<'PY'
+          import sys, pathlib, yaml
+          bad = 0
+          for p in pathlib.Path('.').rglob('*'):
+              if p.suffix in ('.yml', '.yaml'):
+                  try:
+                      yaml.safe_load(p.read_text())
+                  except Exception as e:
+                      bad = 1
+                      print(f"YAML error in {p}: {e}")
+          sys.exit(bad)
+          PY
+
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint GitHub Actions workflows
+        uses: rhysd/actionlint@v1
