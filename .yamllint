@@ -1,5 +1,11 @@
+---
 extends: default
+
 rules:
+  document-start: true            # require '---' at top
   line-length:
     max: 180
     level: warning
+  truthy:
+    # Allow GitHub Actions keys/values like 'on'/'off'
+    allowed-values: ['true', 'false', 'on', 'off']
